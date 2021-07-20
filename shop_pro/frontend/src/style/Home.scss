@@ -1,0 +1,32 @@
+.section-home{
+    padding: 1.5rem 6rem;
+
+    &_card{
+        padding: 2rem;
+        padding-right: .5rem;
+        align-self: stretch;
+        margin-top: 1rem;
+        border: 2px solid rgba($color: #5c5555, $alpha: 0.3);
+        margin-right: 2.5rem;
+        outline-offset: -.4rem;
+        outline: 2px solid rgba($color: #5c5555, $alpha: 0.3);
+
+        &_img{
+            margin-left: 1rem;
+        }
+        &_price{
+            margin-top: 1rem;
+            
+        }
+
+        &_rating{
+            color: pink;
+            margin-right: 2rem;
+        }
+    }
+}
+
+span{
+    margin-left: 1rem;
+}
+

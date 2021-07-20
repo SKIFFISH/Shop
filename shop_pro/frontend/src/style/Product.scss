@@ -1,0 +1,26 @@
+.card{
+    margin-left: 3rem;
+    margin-top: 2rem;
+    padding: 2rem 2rem;
+    height: 17rem;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    border: 1px solid rgba($color: #705a5a, $alpha: 0.3);
+
+    &_btn{
+        background-color: black;
+        color:white;
+        width: 100%;
+
+        &:link,
+        &:hover,
+        &:active,
+        &:visited{
+            background-color: black;
+            color:white;
+            width: 100%;
+        }
+    }
+}
+
