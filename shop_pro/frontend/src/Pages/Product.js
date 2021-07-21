@@ -1,28 +1,36 @@
 
-import { Row,Col,Rate,Typography,Divider,List,Button} from 'antd'
-import products from '../data/products'
+import { Row,Col,Rate,Typography,Divider,List,Button,Alert} from 'antd'
 import '../style/Product.scss'
 import {Link} from 'react-router-dom';
-import axios from 'axios'
+import {useDispatch,useSelector} from 'react-redux'
 import React, { useEffect, useState } from 'react'
+import { detailAction } from '../redux/actions/productActions';
+import { Spin } from 'antd';
+import { Select } from 'antd';
 
 
-const Product = ({match}) => {
-    const [product,setProduct] = useState([]);
 
-    const fetchData = async () => {
-        const {data} = await axios.get(`/api/product/${match.params.id}`);
-
-        setProduct(data.product)
-    }
+const Product = ({history,match}) => {
+    const id = match.params.id;
+    const [qty,setQty] = useState(1);
+    const dispatch = useDispatch();
+    const {product,loading,error} = useSelector(state => state.detailList);
 
     useEffect(() => {
-        fetchData()
-    })
+        dispatch(detailAction(id));  
+    },[dispatch,match])
+
+    const clickHandler =(e) => {
+        e.preventDefault();
+
+        history.push(`/cart/${id}?qty=${qty}`);
+    }
     return (
         <>
            <Divider />
-           <Row>
+           {loading ? <Spin /> : error ? <Alert message = {error} /> :
+           (
+            <Row>
             <Col md={4}>
                 &nbsp;
             </Col>
@@ -69,8 +77,22 @@ const Product = ({match}) => {
                             Status: {product.countInStock ? 'In Stock' : 'Out Of Stock'}
                     </Typography.Text>
                     </div>
+                    <div className = 'card_selector'>
+                        <Typography.Text strong style={{fontSize:'1.5rem',fontWeight:'800',letterSpacing:'.2rem'}} >
+                            Quantity:
+                        </Typography.Text>
+                        <Select onChange = {(value) => {setQty(value)}}
+                        defaultValue={1} style={{width:'50%',textAlign:'center'}}>
+                            {
+                                [...new Array(product.countInStock).keys()].map(n => (
+                                    <option key={n+1}>{n+1}</option>
+                                ))
+                            }
+                        </Select>
+                    </div>
                     <Link to='/'>
-                    <Button disabled={!product.countInStock} className='card_btn'>
+                    <Button onClick = {clickHandler}
+                    disabled={!product.countInStock} className='card_btn'>
                         ADD TO CART
                     </Button>
                     </Link>
@@ -78,6 +100,9 @@ const Product = ({match}) => {
                 </div>
             </Col>
            </Row> 
+           )
+           }
+           
         </>
     )
 }

@@ -12,7 +12,7 @@ function App() {
         <Header />
           <Route exact path='/' component={Home}/>
           <Route path='/product/:id' component={Product} />
-          <Route path='/cart' component={Cart} /> 
+          <Route path='/cart/:id?' component={Cart} /> 
     </Router>
   );
 }

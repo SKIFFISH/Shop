@@ -1,24 +1,28 @@
 const express = require('express');
 const products = require('./data/products');
 const dotenv = require('dotenv');
+const {dbConnect} = require('./utils/dbConnect')
+const productRoute = require('./routes/productRoute');
+const userRoute = require('./routes/userRouter')
 
 dotenv.config()
 
 const app = express();
 
-app.get('/api/products',(req,res) => {
-    res.json({
-        success:true,
-        products
-    })
-})
+dbConnect()
 
-app.get('/api/product/:id',(req,res)=>{
-    const product = products.find(p => p._id === req.params.id);
+
+app.use(express.json())
+app.use('/api/product',productRoute);
+app.use('/api/user',userRoute)
+
+app.use((err,req,res,next) => {
+    const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+    res.status(statusCode);
     res.json({
-        success:true,
-        product
+        message:err.message,
     })
+    next()
 })
 
 const PORT = process.env.PORT || 5000;
