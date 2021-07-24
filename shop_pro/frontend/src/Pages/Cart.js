@@ -102,6 +102,7 @@ const Cart = ({match,location,history}) => {
                     </div>
                     <div>
                     <Button 
+                    onClick = {()=>{history.push('/shipping')}}
                         disabled={!cartItems.length} className='card_btn'>
                         PROCESS TO CHECKOUT
                     </Button>

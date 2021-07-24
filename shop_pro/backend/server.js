@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const {dbConnect} = require('./utils/dbConnect')
 const productRoute = require('./routes/productRoute');
 const userRoute = require('./routes/userRouter')
+const orderRoute = require('./routes/orderRouter')
 
 dotenv.config()
 
@@ -14,7 +15,8 @@ dbConnect()
 
 app.use(express.json())
 app.use('/api/product',productRoute);
-app.use('/api/user',userRoute)
+app.use('/api/user',userRoute);
+app.use('/api/order',orderRoute);
 
 app.use((err,req,res,next) => {
     const statusCode = res.statusCode === 200 ? 500 : res.statusCode;

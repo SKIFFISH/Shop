@@ -21,6 +21,7 @@ router.post('/login',AsyncHandler(async (req,res) => {
             message:'No such User'
         })
     }
+    console.log(email,password)
 
     const isMatch = await user.matchPassword(password);
 
@@ -55,19 +56,22 @@ router.post('/login',AsyncHandler(async (req,res) => {
 router.post('/regist', AsyncHandler(async (req,res) => {
     const {name,email,password,passwordCheck} = req.body;
 
-    const existUser = User.find({email:email});
-    if(existUser){
+    const existUser = await User.find({email:email});
+    if(existUser.length > 0){
         res.status(400).json({
             success:false,
             message:'The email has been registed'
         })
+        throw new Error('The email has been registed')
     }
 
     if(password != passwordCheck){
         res.status(400).json({
             success:fale,
             message:'The password is not equal to check'
+            
         })
+        throw new Error('The password is not equal to check')
     }
 
     const user = await User.create({
@@ -116,6 +120,29 @@ router.get('/profile',auth,async (req,res)=>{
         }
     })
 })
+
+router.put('/profile',auth, AsyncHandler(async(req,res) => {
+    if (user) {
+        user.name = req.body.name || user.name
+        user.email = req.body.email || user.email
+        if (req.body.password) {
+          user.password = req.body.password
+        }
+    
+        const updatedUser = await user.save()
+    
+        res.json({
+          _id: updatedUser._id,
+          name: updatedUser.name,
+          email: updatedUser.email,
+          isAdmin: updatedUser.isAdmin,
+          token: generateToken(updatedUser._id),
+        })
+      } else {
+        res.status(404)
+        throw new Error('User not found')
+      }
+}))
 
 router.get('/',(req,res)=>{
     res.send('hello')

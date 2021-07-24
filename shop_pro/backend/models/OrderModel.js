@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const orderSchema = mongoose.Schema(
   {
-    username: {
+    user: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: 'User',
@@ -23,7 +23,7 @@ const orderSchema = mongoose.Schema(
     shippingAddress: {
       road: { type: String, required: true },
       city: { type: String, required: true },
-      postcode: { type: String, required: true },
+      postCode: { type: String, required: true },
       country: { type: String, required: true },
     },
     paymentMethod: {
