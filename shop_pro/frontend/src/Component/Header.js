@@ -22,6 +22,30 @@ const Header = () => {
           </Menu.Item>
         </Menu>
       );
+
+      const menuAdmin = (
+        <Menu style={{marginTop:'1rem'}}>
+            <Menu.Item>
+            <Link to='/allusers'>
+                UserList
+            </Link>
+          </Menu.Item>
+          <Menu.Item>
+            <Link to='/allproducts'>
+                ProductList
+            </Link>
+          </Menu.Item>
+          <Menu.Item>
+            <Link to='/profile'>
+                Profile
+            </Link>
+          </Menu.Item>
+          <Menu.Item >
+            <p onClick={() => {dispatch(logOut())}}>Log out</p>
+          </Menu.Item>
+        </Menu>
+      );
+    
     
 
     const userLogin = useSelector(state => state.userList);
@@ -42,7 +66,21 @@ const Header = () => {
                                 </div>
                         </Link>
                     {
-                        userInfo ? 
+                        userInfo ? userInfo.isAdmin ? (
+                            <div>
+                            <Avatar 
+                            size='middle'
+                            style={{backgroundColor:'orange' }}
+                            gap={4}>
+                                <p style={{marginRight:'1.5rem'}}>{userInfo.name[0]}</p>
+                            </Avatar>
+                            <Dropdown overlay={menuAdmin}>
+                                <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                                <DownOutlined />
+                                </a>
+                            </Dropdown>
+                        </div>
+                        ) :
                         (
                             <div>
                                 <Avatar 

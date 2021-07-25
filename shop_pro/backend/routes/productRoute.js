@@ -3,6 +3,9 @@ const {dbConnect} = require('../utils/dbConnect')
 const router = express.Router()
 const Product = require('../models/ProductModel')
 const AsyncHandler = require('express-async-handler');
+const auth = require('../middlewares/auth');
+const admin = require('../middlewares/admin')
+
 dbConnect()
 
 router.get('/',AsyncHandler(async (req,res) => {
@@ -33,5 +36,21 @@ router.get('/:id',AsyncHandler( async (req,res)=>{
     }
     
 }))
+
+router.delete('/:id',[auth,admin],AsyncHandler(async (req,res)=>{
+    const product = await User.findById(req.params.id);
+    if(product){
+        product.remove();
+        res.json({
+            message:'Product Removed'
+        })
+    }else{
+        res.status(404).json({
+            message:'Not found'
+        })
+    }
+    
+})
+)
 
 module.exports = router;

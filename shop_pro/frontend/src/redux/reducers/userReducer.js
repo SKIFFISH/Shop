@@ -8,6 +8,25 @@ import {
     USER_REGISTER_REQUEST,
     USER_REGISTER_SUCCESS,
 
+    USER_DETAILS_FAIL,
+    USER_DETAILS_REQUEST,
+    USER_DETAILS_RESET,
+    USER_DETAILS_SUCCESS,
+
+    USER_UPDATE_PROFILE_FAIL,
+    USER_UPDATE_PROFILE_REQUEST,
+    USER_UPDATE_PROFILE_RESET,
+    USER_UPDATE_PROFILE_SUCCESS,
+
+    USER_LIST_FAIL,
+    USER_LIST_REQUEST,
+    USER_LIST_RESET,
+    USER_LIST_SUCCESS,
+
+    USER_DELETE_FAIL,
+    USER_DELETE_SUCCESS,
+    USER_DELETE_REQUEST
+
 } from '../constants/user'
 
 export const userLoginRedu = (state = {userInfo :null},action) => {
@@ -32,6 +51,60 @@ export const userRegistRedu = (state = {},action) => {
         case USER_REGISTER_SUCCESS:
             return {loading:false,userInfo:action.payload};
         case USER_REGISTER_FAIL:
+            return {loading:false,error:action.payload};
+        default:
+            return state
+    }
+}
+
+export const userDetailRedu = (state = {profile:{},loading:true},action) => {
+    switch(action.type){
+        case USER_DETAILS_REQUEST:
+            return {loading:true}
+        case USER_DETAILS_SUCCESS:
+            return {loading:false,profile:action.payload};
+        case USER_DETAILS_FAIL:
+            return {loading:false,error:action.payload};
+        default:
+            return state
+    }
+}
+
+export const userUpdateDetailRedu = (state = {profile:{},loading:true},action) => {
+    switch(action.type){
+        case USER_UPDATE_PROFILE_REQUEST:
+            return {loading:true}
+        case USER_UPDATE_PROFILE_SUCCESS:
+            return {loading:false,profile:action.payload};
+        case USER_UPDATE_PROFILE_FAIL:
+            return {loading:false,error:action.payload};
+        default:
+            return state
+    }
+}
+
+export const userListlRedu = (state = {users:[]},action) => {
+    switch(action.type){
+        case USER_LIST_REQUEST:
+            return {loading:true}
+        case USER_LIST_SUCCESS:
+            return {loading:false,users:action.payload};
+        case USER_LIST_FAIL:
+            return {loading:false,error:action.payload};
+        case USER_LIST_RESET:
+            return {users:[]}
+        default:
+            return state
+    }
+}
+
+export const deleteUserRedu = (state = {},action) => {
+    switch(action.type){
+        case USER_DELETE_REQUEST:
+            return {loading:true}
+        case USER_DELETE_SUCCESS:
+            return {loading:false,meessage:action.payload};
+        case USER_DELETE_FAIL:
             return {loading:false,error:action.payload};
         default:
             return state

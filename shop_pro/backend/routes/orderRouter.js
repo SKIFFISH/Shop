@@ -26,6 +26,18 @@ router.post('/',auth,AsyncHandler(async(req,res) =>{
         res.status(200).json(createdOrder);
 } ))
 
+router.get('/myorders',auth,AsyncHandler(async (req, res) => {
+  const order = await Order.find({user:req.user._id});
+
+  if (order) {
+    res.status(200).json(order)
+  } else {
+    res.status(404)
+    throw new Error('Order not found')
+  }
+})
+)
+
 
 router.get('/:id',auth,AsyncHandler(async(req,res) =>{
     
@@ -60,6 +72,8 @@ router.put('/:id/pay',auth,AsyncHandler(async (req, res) => {
     }
   })
 )
+
+
 
 
 module.exports = router;

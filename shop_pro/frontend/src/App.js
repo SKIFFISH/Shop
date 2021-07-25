@@ -11,6 +11,9 @@ import Shipping from "./Pages/Shipping";
 import Payment from "./Pages/Payment";
 import Order from "./Pages/Order";
 import OrderPay from "./Pages/OrderPay";
+import Profile from "./Pages/Profile";
+import AllUser from "./Pages/AllUser";
+import AllProducts from "./Pages/AllProducts";
 
 function App() {
   return (
@@ -25,6 +28,9 @@ function App() {
           <Route path ='/payment' component ={Payment} />
           <Route path ='/order' component ={Order} exact/>
           <Route path ='/order/:id' component ={OrderPay} />
+          <Route path ='/profile' component ={Profile} />
+          <Route path ='/allusers' component={AllUser} />
+          <Route path='/allproducts' component ={AllProducts} />
     </Router>
   );
 }

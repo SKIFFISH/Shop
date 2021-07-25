@@ -5,6 +5,7 @@ const User = require('../models/UserModel')
 const AsyncHandler = require('express-async-handler');
 const {generateToken} = require('../utils/generateToken');
 const auth = require('../middlewares/auth');
+const admin = require('../middlewares/admin')
 
 dbConnect()
 
@@ -111,17 +112,17 @@ router.get('/profile',auth,async (req,res)=>{
     }
 
     res.status(200).json({
-        success:true,
-        profile:{
-            email:user.email,
-            id:user._id,
-            name:user.name,
-            isAdmin:user.isAdmin
-        }
+        email:user.email,
+        id:user._id,
+        name:user.name,
+        isAdmin:user.isAdmin
     })
 })
 
 router.put('/profile',auth, AsyncHandler(async(req,res) => {
+
+    const user = await User.findById(req.user._id);
+
     if (user) {
         user.name = req.body.name || user.name
         user.email = req.body.email || user.email
@@ -130,7 +131,8 @@ router.put('/profile',auth, AsyncHandler(async(req,res) => {
         }
     
         const updatedUser = await user.save()
-    
+        console.log(req.body)
+
         res.json({
           _id: updatedUser._id,
           name: updatedUser.name,
@@ -143,6 +145,29 @@ router.put('/profile',auth, AsyncHandler(async(req,res) => {
         throw new Error('User not found')
       }
 }))
+
+router.get('/allusers',[auth,admin],AsyncHandler(async (req,res)=>{
+    const users = await User.find({});
+    res.json(users);
+})
+)
+
+router.delete('/:id',[auth,admin],AsyncHandler(async (req,res)=>{
+    const user = await User.findById(req.params.id);
+    if(user){
+        user.remove();
+        res.json({
+            message:'User Removed'
+        })
+    }else{
+        res.status(404).json({
+            message:'Not found'
+        })
+    }
+    
+})
+)
+
 
 router.get('/',(req,res)=>{
     res.send('hello')
