@@ -49,7 +49,7 @@ const Home = ({match}) => {
                                 textAlign: 'center',
                                 backgroundImage:`url('https://res.vmallres.com/pimages//pages/picImages/92192062272616029129.jpg')`,
                                 backgroundPosition:'cover'
-                             }}>2</h3>
+                             }}></h3>
                             </div>
                             <div>
                             <h3 style={{height: '36rem',
@@ -58,7 +58,7 @@ const Home = ({match}) => {
                                 textAlign: 'center',
                                 backgroundImage:`url('https://res.vmallres.com/pimages//pages/picImages/44448932272613984444.jpg')`,
                                 backgroundSize:'cover'
-                             }}>3</h3>
+                             }}></h3>
                             </div>
                             <div>
                             <h3 style={{height: '36rem',
@@ -67,7 +67,7 @@ const Home = ({match}) => {
                                 textAlign: 'center',
                                 backgroundImage:`url('https://res.vmallres.com/pimages//pages/picImages/16729332962613392761.jpg')`,
                                 backgroundPosition:'cover'
-                             }}>4</h3>
+                             }}></h3>
                             </div>
                         </Carousel>
                     )

@@ -9,7 +9,7 @@ import { Button } from 'antd'
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { userLoginAction, userRegistAction } from '../redux/actions/userAction'
 
-const EditProduct = ({match}) => {
+const EditProduct = ({match,history}) => {
 
     const productId = match.params.id;
 
@@ -27,6 +27,9 @@ const EditProduct = ({match}) => {
     const productDetail = useSelector(state => state.detailList);
     const {loading,product,error}  = productDetail
 
+    const updateList = useSelector(state => state.updateProductList);
+    const {loading:updateLoading}  = updateList
+
     const clickHandler = () =>{
         const data = {
             name,
@@ -38,7 +41,10 @@ const EditProduct = ({match}) => {
             description
         }
 
-        dispatch(updateProductAction(productId,data))
+        dispatch(updateProductAction(productId,data));
+        setTimeout(() => {
+            history.push('/');
+        },0)
     }
 
     useEffect(() => {
@@ -47,7 +53,8 @@ const EditProduct = ({match}) => {
 
     return (
         <>
-            <Row style={{marginTop:'3rem'}}>
+            {updateLoading ? <Spin /> : (
+                <Row style={{marginTop:'3rem'}}>
                 <Col md = {6}>
                     &nbsp;
                 </Col>
@@ -144,6 +151,8 @@ const EditProduct = ({match}) => {
                     </Form>
                 </Col>
             </Row>
+            )}
+            
         </>
     )
 }

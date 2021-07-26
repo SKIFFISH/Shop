@@ -69,12 +69,14 @@ const AllProducts = ({history}) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(productListAction());
+        
 
         if(product){
             dispatch({type:PRODUCT_CREATE_RESET})
             history.push(`admin/product/${product._id}/edit`);
         }
+
+        dispatch(productListAction(''));
     },[dispatch,createLoading])
 
     const addProduct = async () =>{

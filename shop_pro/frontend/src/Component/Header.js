@@ -12,6 +12,8 @@ const Header = () => {
     const dispatch = useDispatch()
     const history = useHistory();
     const [keyword,setKeyWord] = useState('');
+    const [show,setShow] = useState(false);
+    const [searchData,setSearchData] = useState([]);
     const menu = (
         <Menu style={{marginTop:'1rem'}}>
           <Menu.Item>
@@ -59,6 +61,49 @@ const Header = () => {
             history.push('/')
         }
     }
+
+    const debounce = (f,time) => {
+        let timer;
+        return function(){
+            let cxt = this
+            if(timer){
+                console.log('clear')
+                clearTimeout(timer);
+            }
+
+            timer = setTimeout(() => {
+                f()
+            },time)
+        }
+    }
+
+    
+
+
+    const keyUpHandler = () => {
+        let script = document.createElement('script');
+        script.type = 'text/javascript';
+
+        script.src = `http://suggestqueries.google.com/complete/search?client=youtube&q=${keyword}&jsonp=window.google.ac.h`;
+
+        document.body.appendChild(script)
+
+        window.google = {
+            ac:{
+                h: function(json){
+                console.log(json);
+                if(json[1].length > 0){
+                    setSearchData(json[1])
+                }
+            }
+            }
+        }
+
+        setShow(true)
+    }
+
+    let keyUpHandlerAfterDebounce = debounce(keyUpHandler,1000);
+
     return (
 
         <>
@@ -71,6 +116,9 @@ const Header = () => {
                 borderRadius:'.8rem',outline:'none',backgroundColor:'gray'}}
                 type='text' 
                 onChange={(e) => {setKeyWord(e.target.value)}}
+                onKeyUp={keyUpHandlerAfterDebounce}
+                value={keyword}
+                onBlur={() => {setShow(false)}}
                 placeholder='Search your shopping here'/>
                 <SearchOutlined style={{
                     position:'relative',
@@ -84,7 +132,31 @@ const Header = () => {
                 }} 
                 onClick={clickHandler}
                 />
-               
+               {
+                   show ? (
+                       <ul style={{
+                           padding:'1rem',
+                           listStyle:'none',
+                           position:'absolute',
+                           color:'black',
+                           fontSize:'1rem',
+                           backgroundColor:'white',
+                           zIndex:'3'
+                       }}
+                       onClick={(e) => {console.log(e.target.value)}}
+                       >
+                           {searchData.map(s => (
+                               <li style={{
+                                cursor:'pointer',
+                                padding:'.5rem 1rem'
+                               }}
+                               key={Math.random()}
+                               
+                               >{s[0]}</li>
+                           ))}
+                       </ul>
+                   ) : <></>
+               }
                 </div>
                 
                 <div className='header-btn'>

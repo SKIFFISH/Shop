@@ -72,7 +72,7 @@ const Product = ({history,match}) => {
                     </List.Item>
                     <List.Item>
                         <Typography.Text >
-                            Description: ${product.description}
+                            Description: {product.description}
                         </Typography.Text>
                     </List.Item>
                 </List>
