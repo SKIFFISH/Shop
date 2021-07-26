@@ -4,7 +4,8 @@ const dotenv = require('dotenv');
 const {dbConnect} = require('./utils/dbConnect')
 const productRoute = require('./routes/productRoute');
 const userRoute = require('./routes/userRouter')
-const orderRoute = require('./routes/orderRouter')
+const orderRoute = require('./routes/orderRouter');
+const morgan = require('morgan')
 
 dotenv.config()
 
@@ -13,7 +14,10 @@ const app = express();
 dbConnect()
 
 
-app.use(express.json())
+app.use(express.json());
+app.use(morgan('dev'));
+
+
 app.use('/api/product',productRoute);
 app.use('/api/user',userRoute);
 app.use('/api/order',orderRoute);

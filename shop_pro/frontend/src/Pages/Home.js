@@ -1,27 +1,77 @@
 import React, { useEffect, useState } from 'react'
-import { Row,Col,Rate,Typography,Spin,Alert} from 'antd'
+import { Row,Col,Rate,Typography,Spin,Alert,Carousel,Image} from 'antd'
 import '../style/Home.scss'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
 import {useDispatch,useSelector} from 'react-redux'
 import { productListAction } from '../redux/actions/productActions'
+import {Helmet} from 'react-helmet'
 
-const Home = () => {
+const Home = ({match}) => {
     const {Title,Text} = Typography;
 
     const dispatch = useDispatch();
+
+    const keyword = match.params.keyword ? match.params.keyword : '';
 
     const productsList = useSelector(state => state.productList);
 
     const {products,loading,error} = productsList;
 
     useEffect(() => {
-        console.log(1)
-        dispatch(productListAction())
-    },[dispatch])
+        dispatch(productListAction(keyword))
+    },[dispatch,keyword])
     return (
         <>
+        <Helmet>
+            <title>Welcomet to my Shop</title>
+            <meta name='description' content='This is just an exercise for CRIS' />
+            <meta name='author' content='According to the Pro Shop' />
+        </Helmet>
             <div className='section-home'>
+                {
+                    match.params.keyword ? <></> :
+                    (
+                        <Carousel autoplay>
+                            <div>
+                            <h3 style={{height: '36rem',
+                                color: '#fff',
+                                lineHeight: '160px',
+                                textAlign: 'center',
+                                backgroundImage:`url('https://res.vmallres.com/pimages//pages/picImages/39607142272614170693.png')`,
+                                backgroundPosition:'cover'
+                             }}></h3>
+                            </div>
+                            <div>
+                            <h3 style={{height: '36rem',
+                                color: '#fff',
+                                lineHeight: '160px',
+                                textAlign: 'center',
+                                backgroundImage:`url('https://res.vmallres.com/pimages//pages/picImages/92192062272616029129.jpg')`,
+                                backgroundPosition:'cover'
+                             }}>2</h3>
+                            </div>
+                            <div>
+                            <h3 style={{height: '36rem',
+                                color: '#fff',
+                                lineHeight: '160px',
+                                textAlign: 'center',
+                                backgroundImage:`url('https://res.vmallres.com/pimages//pages/picImages/44448932272613984444.jpg')`,
+                                backgroundSize:'cover'
+                             }}>3</h3>
+                            </div>
+                            <div>
+                            <h3 style={{height: '36rem',
+                                color: '#fff',
+                                lineHeight: '160px',
+                                textAlign: 'center',
+                                backgroundImage:`url('https://res.vmallres.com/pimages//pages/picImages/16729332962613392761.jpg')`,
+                                backgroundPosition:'cover'
+                             }}>4</h3>
+                            </div>
+                        </Carousel>
+                    )
+                }
                 <div className='section-home_title'>
                     WelCome to My Shop
                 </div>

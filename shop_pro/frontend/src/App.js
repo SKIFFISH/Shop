@@ -14,12 +14,14 @@ import OrderPay from "./Pages/OrderPay";
 import Profile from "./Pages/Profile";
 import AllUser from "./Pages/AllUser";
 import AllProducts from "./Pages/AllProducts";
+import EditProduct from "./Pages/EditProduct";
 
 function App() {
   return (
     <Router>
-        <Header />
-          <Route exact path='/' component={Home}/>
+        <Header/>
+          <Route exact path='/' component={Home} />
+          <Route path='/search/:keyword' component={Home} />
           <Route path='/product/:id' component={Product} />
           <Route path='/cart/:id?' component={Cart} />
           <Route path='/login' component={Login} />
@@ -31,6 +33,7 @@ function App() {
           <Route path ='/profile' component ={Profile} />
           <Route path ='/allusers' component={AllUser} />
           <Route path='/allproducts' component ={AllProducts} />
+          <Route path='/admin/product/:id/edit' component={EditProduct} />
     </Router>
   );
 }

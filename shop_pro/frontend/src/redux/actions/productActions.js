@@ -9,16 +9,30 @@ import {
 
     PRODUCT_DELETE_FAIL,
     PRODUCT_DELETE_REQUEST,
-    PRODUCT_DELETE_SUCCESS
+    PRODUCT_DELETE_SUCCESS,
+
+    PRODUCT_CREATE_FAIL,
+    PRODUCT_CREATE_SUCCESS,
+    PRODUCT_CREATE_REQUEST,
+    PRODUCT_CREATE_RESET,
+
+    PRODUCT_UPDATE_FAIL,
+    PRODUCT_UPDATE_REQUEST,
+    PRODUCT_UPDATE_SUCCESS,
+    PRODUCT_UPDATE_RESET,
+
+    PRODUCT_CREATE_REVIEW_FAIL,
+    PRODUCT_CREATE_REVIEW_REQUEST,
+    PRODUCT_CREATE_REVIEW_RESET,
+    PRODUCT_CREATE_REVIEW_SUCCESS
 } from '../constants/products'
 import axios from 'axios';
 
-export const productListAction = () => async (dispatch) =>{
+export const productListAction = (keyword) => async (dispatch) =>{
     try{
         dispatch({type:PRODUCT_LIST_REQUEST});
-
-        const {data} = await axios.get('/api/product');
-
+        const {data} = await axios.get(`/api/product?keyword=${keyword}`);
+     
         dispatch({type:PRODUCT_LIST_SUCCESS,
                 payload:data.products
         })
@@ -69,6 +83,82 @@ export const productdeleteAction = (id) => async (dispatch,getState) =>{
     }catch(error){
         dispatch({
             type:PRODUCT_DELETE_FAIL,
+            payload:error.response && error.response.data.message ? error.response.data.message
+            :error.message
+        })
+    }
+}
+
+export const createProductAction = () => async (dispatch,getState) =>{
+    try{
+        dispatch({type:PRODUCT_CREATE_REQUEST});
+
+        const {userList:{userInfo}} = getState();
+
+        const config ={
+            headers:{
+                Authorization:`Bearer ${userInfo.token}`
+            }
+        }
+
+        const {data} = await axios.get(`/api/product/newProduct`,config);
+
+        dispatch({type:PRODUCT_CREATE_SUCCESS,
+                payload:data
+        })
+    }catch(error){
+        dispatch({
+            type:PRODUCT_CREATE_FAIL,
+            payload:error.response && error.response.data.message ? error.response.data.message
+            :error.message
+        })
+    }
+}
+
+export const updateProductAction = (id,Pdata) => async (dispatch,getState) =>{
+    try{
+        dispatch({type:PRODUCT_UPDATE_REQUEST});
+
+        const {userList:{userInfo}} = getState();
+        const config ={
+            headers:{
+                Authorization:`Bearer ${userInfo.token}`
+            }
+        }
+
+        const {data} = await axios.put(`/api/product/${id}`,Pdata,config);
+
+        dispatch({type:PRODUCT_UPDATE_SUCCESS,
+                payload:data
+        })
+    }catch(error){
+        dispatch({
+            type:PRODUCT_UPDATE_FAIL,
+            payload:error.response && error.response.data.message ? error.response.data.message
+            :error.message
+        })
+    }
+}
+
+export const productReviewAction = (id,Pdata) => async (dispatch,getState) =>{
+    try{
+        dispatch({type:PRODUCT_CREATE_REVIEW_REQUEST});
+
+        const {userList:{userInfo}} = getState();
+        const config ={
+            headers:{
+                Authorization:`Bearer ${userInfo.token}`
+            }
+        }
+
+        const {data} = await axios.post(`/api/product/${id}/review`,Pdata,config);
+
+        dispatch({type:PRODUCT_CREATE_REVIEW_SUCCESS,
+                payload:data
+        })
+    }catch(error){
+        dispatch({
+            type:PRODUCT_CREATE_REVIEW_FAIL,
             payload:error.response && error.response.data.message ? error.response.data.message
             :error.message
         })

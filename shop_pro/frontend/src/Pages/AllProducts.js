@@ -4,13 +4,13 @@ import '../style/Home.scss'
 import {Link} from 'react-router-dom'
 import {useDispatch,useSelector} from 'react-redux'
 import { CheckCircleTwoTone,CloseCircleTwoTone,PlusCircleOutlined } from '@ant-design/icons'
-import { userdeleteAction, userListAction} from '../redux/actions/userAction'
 import { Space } from 'antd'
 import { Table } from 'antd'
-import { productdeleteAction, productListAction } from '../redux/actions/productActions'
+import { createProductAction, productdeleteAction, productListAction } from '../redux/actions/productActions'
 import { Button } from 'antd'
+import { PRODUCT_CREATE_RESET } from '../redux/constants/products'
 
-const AllProducts = () => {
+const AllProducts = ({history}) => {
     const columns = [
         {
             title:'ID',
@@ -45,7 +45,7 @@ const AllProducts = () => {
             key:'action',
             render:(text,record)=>(
                     <Space size='middle'>
-                    <a>Detail</a>
+                    <Link to={`/admin/product/${record._id}/edit`}><a>Edit</a></Link>
                     <a onClick={async (e) => {
                         e.preventDefault();
                         if(window.confirm('Are you sure?')){
@@ -64,12 +64,23 @@ const AllProducts = () => {
     const productList = useSelector(state=>state.productList);
     const {loading,products,error} = productList;
     
-
+    const createList = useSelector(state => state.createProductList);
+    const {loading:createLoading,product} = createList
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(productListAction());
-    },[dispatch])
+
+        if(product){
+            dispatch({type:PRODUCT_CREATE_RESET})
+            history.push(`admin/product/${product._id}/edit`);
+        }
+    },[dispatch,createLoading])
+
+    const addProduct = async () =>{
+        await dispatch(createProductAction());
+  
+    }
     return (
         
         <Row>
@@ -82,6 +93,7 @@ const AllProducts = () => {
                 </Typography.Title>
                 <PlusCircleOutlined style={{position:'relative',left:'2rem',zIndex:'2',color:'white',cursor:'pointer'}}/>
                 <Button 
+                onClick = {addProduct}
                 style={{backgroundColor:'black',color:'white',marginBottom:'2rem'}}>Add Products</Button>
                 {loading? <Spin /> :
                 <Table columns={columns} dataSource ={products} />

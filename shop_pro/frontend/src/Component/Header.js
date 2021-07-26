@@ -1,15 +1,17 @@
-import React from 'react';
+import React ,{useState}from 'react';
 import '../style/Header.scss'
-import {ShoppingCartOutlined, UserOutlined,DownOutlined} from '@ant-design/icons'
+import {ShoppingCartOutlined, UserOutlined,DownOutlined,SearchOutlined} from '@ant-design/icons'
 import {Link} from 'react-router-dom'
-import {Avatar,Menu,Dropdown} from 'antd'
+import {Avatar,Menu,Dropdown,Button} from 'antd'
 import {useSelector,useDispatch} from 'react-redux';
 import { logOut } from '../redux/actions/userAction';
+import {useHistory} from 'react-router-dom'
 
 const Header = () => {
 
     const dispatch = useDispatch()
-
+    const history = useHistory();
+    const [keyword,setKeyWord] = useState('');
     const menu = (
         <Menu style={{marginTop:'1rem'}}>
           <Menu.Item>
@@ -50,6 +52,13 @@ const Header = () => {
 
     const userLogin = useSelector(state => state.userList);
     const {userInfo}  = userLogin 
+    const clickHandler = () => {
+        if(keyword.trim()) {
+            history.push(`/search/${keyword}`)
+        }else{
+            history.push('/')
+        }
+    }
     return (
 
         <>
@@ -57,6 +66,26 @@ const Header = () => {
                 <Link to='/' style={{color:'white'}}>
                     <div className='header-brand'>Cris Shop</div>
                 </Link>
+                <div>
+                <input style={{fontSize:'1rem',width:'25rem', padding:'.5rem 1rem',
+                borderRadius:'.8rem',outline:'none',backgroundColor:'gray'}}
+                type='text' 
+                onChange={(e) => {setKeyWord(e.target.value)}}
+                placeholder='Search your shopping here'/>
+                <SearchOutlined style={{
+                    position:'relative',
+                    top:'.4rem',
+                    cursor:'pointer',
+                    right:'4rem',
+                    backgroundColor:'transparent',
+                    outline:'none',
+                    border:'none',
+                    color:'white'
+                }} 
+                onClick={clickHandler}
+                />
+               
+                </div>
                 
                 <div className='header-btn'>
                         <Link to='/cart' style={{color:'white'}}>
